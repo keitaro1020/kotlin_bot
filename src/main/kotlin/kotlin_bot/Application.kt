@@ -97,7 +97,6 @@ fun Application.main() {
                                                 )))
                                         ))).toJsonString())
 
-
                                         val (_, _, _) = "https://slack.com/api/chat.postMessage".httpPost(map.toList()).responseString()
                                     }
                                 }
