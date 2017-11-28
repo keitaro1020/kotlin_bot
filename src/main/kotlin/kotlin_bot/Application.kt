@@ -81,21 +81,36 @@ fun Application.main() {
                         val eventObj = payload["event"] as LinkedHashMap<String, String>?
                         logger.info("eventObj: ${eventObj}")
                         if (eventObj != null) {
-                            val text = eventObj["text"]
+                            val text = eventObj["text"] ?: ""
                             when (eventObj["type"]) {
                                 "message" -> {
-                                    if(text != null && text.startsWith("<@${secretConfig[teamId]?.botuser}>")) {
+                                    var message = ""
+                                    var attachements = ""
+
+                                    when {
+                                        text.startsWith("<@${secretConfig[teamId]?.botuser}>") -> {
+                                            message = "呼びましたか？"
+                                            attachements = text
+                                        }
+                                        text.toLowerCase().equals("botlin") -> {
+                                            message = "私です"
+                                        }
+                                    }
+
+                                    if (message.isNotEmpty()) {
                                         val map = mutableMapOf<String, Any?>()
                                         map.put("token", token)
                                         map.put("channel", eventObj["channel"])
-                                        map.put("text", "呼びましたか？")
-                                        map.put("attachments", JsonArray(JsonObject(mapOf(
-                                                "color" to "#42ce9f",
-                                                "fields" to JsonArray(JsonObject(mapOf(
-                                                        "value" to text,
-                                                        "short" to true
-                                                )))
-                                        ))).toJsonString())
+                                        map.put("text", message)
+                                        if (attachements.isNotEmpty()) {
+                                            map.put("attachments", JsonArray(JsonObject(mapOf(
+                                                    "color" to "#42ce9f",
+                                                    "fields" to JsonArray(JsonObject(mapOf(
+                                                            "value" to attachements,
+                                                            "short" to true
+                                                    )))
+                                            ))).toJsonString())
+                                        }
 
                                         val (_, _, _) = "https://slack.com/api/chat.postMessage".httpPost(map.toList()).responseString()
                                     }
