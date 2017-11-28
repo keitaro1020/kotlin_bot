@@ -92,7 +92,7 @@ fun Application.main() {
                                             message = "呼びましたか？"
                                             attachements = text
                                         }
-                                        text.toLowerCase().equals("botlin") -> {
+                                        text.toLowerCase().indexOf("botlin") > 0 -> {
                                             message = "私です"
                                         }
                                     }
