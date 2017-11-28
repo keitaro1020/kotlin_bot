@@ -86,6 +86,7 @@ fun Application.main() {
                                 "message" -> {
                                     var message = ""
                                     var attachements = ""
+                                    var username = ""
 
                                     when {
                                         text.startsWith("<@${secretConfig[teamId]?.botuser}>") -> {
@@ -95,6 +96,10 @@ fun Application.main() {
                                         text.toLowerCase().indexOf("botlin") > 0 -> {
                                             message = "私です"
                                         }
+                                        text.matches(".*友達なら.*".toRegex()) -> {
+                                            message = "アタリマエ〜"
+                                            username = "アルシンド"
+                                        }
                                     }
 
                                     if (message.isNotEmpty()) {
@@ -102,6 +107,9 @@ fun Application.main() {
                                         map.put("token", token)
                                         map.put("channel", eventObj["channel"])
                                         map.put("text", message)
+                                        if (username.isNotEmpty()) {
+                                            map.put("username", username)
+                                        }
                                         if (attachements.isNotEmpty()) {
                                             map.put("attachments", JsonArray(JsonObject(mapOf(
                                                     "color" to "#42ce9f",
