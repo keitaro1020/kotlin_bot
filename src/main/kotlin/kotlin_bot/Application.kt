@@ -50,7 +50,7 @@ fun Application.main() {
 
     install(Routing) {
         get("/") {
-            call.respondText("Hello !!!!!")
+            call.respondText("I am Botlin!!")
         }
         post("/") {
             val payload = try {
