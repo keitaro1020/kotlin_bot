@@ -90,8 +90,25 @@ fun Application.main() {
 
                                     when {
                                         text.startsWith("<@${secretConfig[teamId]?.botuser}>") -> {
-                                            message = "呼びましたか？"
-                                            attachements = text
+                                            when {
+                                                text.matches(".*名前.*".toRegex()) -> {
+                                                    message = "Botlinと言います"
+                                                }
+                                                text.matches(".*生年月日.*".toRegex()) -> {
+                                                    message = "Kotlinが最初に発表されたのは2011年7月20日です"
+                                                }
+                                                text.matches(".*技術スタック.*".toRegex()) -> {
+                                                    message = """
+・言語：Kotlin
+・フレームワーク：Ktor
+・実行環境：Google Apps Engine [Flexible enviroment]
+"""
+                                                }
+                                                else -> {
+                                                    message = "呼びましたか？"
+                                                    attachements = text
+                                                }
+                                            }
                                         }
                                         text.toLowerCase().indexOf("botlin") > 0 -> {
                                             message = "私です"
